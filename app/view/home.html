@@ -1,0 +1,156 @@
+{% extends "main.html" %}
+
+{% block main %}
+<!-- 🌸 Navbar Hello Kitty Premium Style -->
+<nav class="navbar navbar-expand-lg shadow-sm kitty-navbar">
+  <div class="container-fluid">
+    
+    <!-- Logo / Marca -->
+    <a class="navbar-brand d-flex align-items-center fw-bold text-white" href="#">
+      <img src="https://i.scdn.co/image/ab67616d00001e02abfff86f8944c52b41fb430a" 
+           alt="Hello Kitty" width="36" height="36" class="me-2 kitty-logo">
+      {{EMPRESA}}
+    </a>
+
+    <!-- Botão de menu mobile -->
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse"
+      data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+      aria-expanded="false" aria-label="Alternar navegação">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Itens do menu -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+        <!-- Início -->
+        <li class="nav-item">
+          <a class="nav-link active text-white fw-semibold" href="/home">
+            <i class="bi bi-house-heart-fill me-1"></i> Início
+          </a>
+        </li>
+
+        <!-- Dropdown de Cadastros -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle text-white fw-semibold" href="#" 
+             id="cadastrosDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-folder-heart me-1"></i> Cadastros
+          </a>
+          <ul class="dropdown-menu kitty-dropdown border-0 shadow" aria-labelledby="cadastrosDropdown">
+            <li><a class="dropdown-item" href="/cliente/lista"><i class="bi bi-person-heart"></i> Cliente</a></li>
+            <li><a class="dropdown-item" href="/fornecedor/lista"><i class="bi bi-truck-front"></i> Fornecedor</a></li>
+            <li><a class="dropdown-item" href="/usuario/lista"><i class="bi bi-people-fill"></i> Usuário</a></li>
+          </ul>
+        </li>
+      </ul>
+
+      <!-- Botões à direita -->
+      <div class="d-flex gap-2">
+        <a href="/perfil" class="btn kitty-btn-outline">
+          <i class="bi bi-person-circle"></i> Perfil
+        </a>
+        <a href="/logout" class="btn kitty-btn">
+          <i class="bi bi-box-arrow-right"></i> Sair
+        </a>
+      </div>
+    </div>
+  </div>
+</nav>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css"></link>
+<!-- 🌷 Estilos Hello Kitty Premium -->
+<style>
+  /* Fundo gradiente suave */
+  .kitty-navbar {
+    background: linear-gradient(90deg, #ffb6d9, #ff9fcf, #ff80c3);
+    border-bottom: 2px solid #ffd6ea;
+    padding: 0.6rem 1rem;
+  }
+
+  /* Logo com brilho sutil */
+  .kitty-logo {
+    filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.7));
+  }
+
+  /* Links principais */
+  .navbar-nav .nav-link {
+    transition: color 0.3s ease, transform 0.2s ease;
+  }
+
+  .navbar-nav .nav-link:hover {
+    color: #fff9fb !important;
+    text-shadow: 0 0 8px #ffe0f0;
+    transform: translateY(-2px);
+  }
+
+  /* Dropdown estilizado */
+  .kitty-dropdown {
+    background-color: #fff5fa;
+    border-radius: 10px;
+    padding: 0.4rem;
+    animation: fadeIn 0.3s ease-in-out;
+  }
+
+  .kitty-dropdown a {
+    color: #d63384 !important;
+    font-weight: 500;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+  }
+
+  .kitty-dropdown a:hover {
+    background-color: #ffd6ea !important;
+    color: #a31561 !important;
+    transform: translateX(4px);
+  }
+
+  /* Botões */
+  .kitty-btn {
+    background-color: #ffffff;
+    color: #d63384;
+    border: 2px solid #ffd6ea;
+    font-weight: 600;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+  }
+
+  .kitty-btn:hover {
+    background-color: #ffb6e6;
+    color: #fff;
+    box-shadow: 0 0 10px rgba(255, 192, 203, 0.6);
+    transform: scale(1.05);
+  }
+
+  .kitty-btn-outline {
+    border: 2px solid #fff;
+    color: #fff;
+    font-weight: 600;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+  }
+
+  .kitty-btn-outline:hover {
+    background-color: #fff;
+    color: #d63384;
+    box-shadow: 0 0 8px #fff;
+    transform: scale(1.05);
+  }
+
+  /* Animação de entrada */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Responsividade */
+  @media (max-width: 992px) {
+    .navbar-nav {
+      text-align: center;
+    }
+    .d-flex {
+      justify-content: center;
+      margin-top: 1rem;
+    }
+  }
+</style>
+
+{% endblock %}

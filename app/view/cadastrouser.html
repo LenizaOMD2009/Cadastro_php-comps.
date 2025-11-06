@@ -1,0 +1,522 @@
+{% extends "main.html" %}
+{% block main %}
+<!-- 🌸 Formulário Hello Kitty Premium -->
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-lg-8">
+      <div class="card kitty-card shadow-lg border-0">
+        <div class="card-header kitty-card-header text-center">
+          <h4 class="fw-bold text-white mb-0">
+            <i class="bi bi-person-heart"></i> Cadastro de Usuário
+          </h4>
+        </div>
+        
+        <div class="card-body bg-white rounded-bottom">
+          <form class="row g-3 needs-validation" novalidate>
+            <!-- Nome -->
+            <div class="col-md-4">
+              <label for="validationCustom01" class="form-label kitty-label">Nome</label>
+              <input type="text" class="form-control kitty-input" id="validationCustom01" required>
+              <div class="valid-feedback">Perfeito!</div>
+            </div>
+            
+            <!-- Sobrenome -->
+            <div class="col-md-4">
+              <label for="validationCustom02" class="form-label kitty-label">Sobrenome</label>
+              <input type="text" class="form-control kitty-input" id="validationCustom02" required>
+              <div class="valid-feedback">Perfeito!</div>
+            </div>
+            
+          <!-- CPF ou CNPJ -->
+          <div class="col-md-4">
+            <label for="cpfCnpj" class="form-label kitty-label">CPF ou CNPJ</label>
+            <input type="text" class="form-control kitty-input" id="cpfCnpj" required>
+            <div class="invalid-feedback">Coloque um CPF ou CNPJ válido</div>
+          </div>
+          
+            
+            <!-- RG -->
+            <div class="col-md-3">
+              <label for="rg" class="form-label kitty-label">RG</label>
+              <input type="text" class="form-control kitty-input" id="rg" required>
+              <div class="invalid-feedback">Coloque seu RG</div>
+            </div>
+
+              <!-- Email -->
+              <div class="col-md-4">
+                <label for="validationCustomUsername" class="form-label kitty-label">Email</label>
+                <div class="input-group has-validation">
+                  <span class="input-group-text kitty-input-prepend" id="inputGroupPrepend">@</span>
+                  <input type="email" class="form-control kitty-input" id="validationCustomUsername" aria-describedby="inputGroupPrepend" required>
+                  <div class="invalid-feedback">Coloque seu email</div>
+                </div>
+              </div>
+              
+            <!-- Celular -->
+            <div class="col-md-4">
+              <label for="celular" class="form-label kitty-label">Celular</label>
+              <input type="text" class="form-control kitty-input" id="celular" required>
+              <div class="invalid-feedback">Coloque seu celular</div>
+            </div>
+            
+          <!-- Senha -->
+          <div class="col-md-4">
+            <label for="inputPassword3" class="form-label kitty-label">Senha</label>
+            <input type="password" class="form-control kitty-input" id="inputPassword3" required>
+            <div class="invalid-feedback">Coloque sua senha</div>
+          </div>
+
+            <!-- Checkbox -->
+            <div class="col-12">
+              <div class="form-check">
+                <input class="form-check-input kitty-checkbox" type="checkbox" value="" id="invalidCheck" required>
+                <label class="form-check-label kitty-label" for="invalidCheck">
+                  Aceito os termos
+                </label>
+                <div class="invalid-feedback">Você deve aceitar antes de enviar.</div>
+              </div>
+            </div>
+
+            <!-- Botão salvar -->
+            <div class="col-12 text-center mt-3">
+              <button class="btn kitty-btn" type="submit">
+                <i class="bi bi-heart-fill"></i> Salvar
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <div class="card-footer text-center bg-white border-0">
+          <a href="/usuario/lista" class="btn kitty-btn-outline">
+            <i class="bi bi-arrow-left-circle"></i> Voltar à página
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- 🧩 Validação e salvamento -->
+<script>
+(() => {
+  'use strict';
+  const forms = document.querySelectorAll('.needs-validation');
+  Array.from(forms).forEach(form => {
+    form.addEventListener('submit', event => {
+      if (!form.checkValidity()) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+      form.classList.add('was-validated');
+    }, false);
+  });
+})();
+</script>
+
+<script>
+(() => {
+  'use strict';
+
+  const forms = document.querySelectorAll('.needs-validation');
+  Array.from(forms).forEach(form => {
+    form.addEventListener('submit', event => {
+      event.preventDefault();
+      event.stopPropagation();
+
+      if (!form.checkValidity()) {
+        form.classList.add('was-validated');
+        return;
+      }
+
+      // 🌸 Captura dos campos do formulário
+      const nome = document.getElementById('validationCustom01').value.trim();
+      const sobrenome = document.getElementById('validationCustom02').value.trim();
+      const cpfCnpj = document.getElementById('cpfCnpj').value.trim();
+      const rg = document.getElementById('rg').value.trim();
+      const email = document.getElementById('validationCustomUsername').value.trim();
+      const celular = document.getElementById('celular').value.trim();
+      const senha = document.getElementById('inputPassword3').value.trim();
+
+      // 🌷 Busca usuários existentes no localStorage
+      const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
+
+      // 💫 Adiciona o novo usuário
+      usuarios.push({ nome, sobrenome, cpfCnpj, rg, email, celular, senha });
+
+      // 🌈 Salva de volta no localStorage
+      localStorage.setItem('usuarios', JSON.stringify(usuarios));
+
+      alert('Usuário cadastrado com sucesso! 💗');
+      window.location.href = "/usuario/lista";
+    });
+  });
+})();
+</script>
+
+<!-- 🌸 Validação de CPF/CNPJ e Celular com Máscara -->
+
+<script>
+/* 🌸 Funções de validação */
+function validarCNPJ(cnpj) {
+  cnpj = cnpj.replace(/[^\d]+/g, '');
+
+  // Permite CNPJs de teste específicos
+  const cnpjsTeste = ['00000000000000', '11111111111111', '12.345.678/0001-95',]; // adicione os que quiser
+  if (cnpjsTeste.includes(cnpj)) return true;
+
+  if (cnpj.length !== 14 || /^(\d)\1+$/.test(cnpj)) return false;
+
+  let tamanho = cnpj.length - 2;
+  let numeros = cnpj.substring(0, tamanho);
+  let digitos = cnpj.substring(tamanho);
+  let soma = 0;
+  let pos = tamanho - 7;
+
+  for (let i = tamanho; i >= 1; i--) {
+    soma += numeros.charAt(tamanho - i) * pos--;
+    if (pos < 2) pos = 9;
+  }
+
+  let resultado = soma % 11 < 2 ? 0 : 11 - (soma % 11);
+  if (resultado != digitos.charAt(0)) return false;
+
+  tamanho++;
+  numeros = cnpj.substring(0, tamanho);
+  soma = 0;
+  pos = tamanho - 7;
+
+  for (let i = tamanho; i >= 1; i--) {
+    soma += numeros.charAt(tamanho - i) * pos--;
+    if (pos < 2) pos = 9;
+  }
+
+  resultado = soma % 11 < 2 ? 0 : 11 - (soma % 11);
+  return resultado == digitos.charAt(1);
+}
+
+
+function validarCPF(cpf) {
+  cpf = cpf.replace(/[^\d]+/g, '');
+
+  // Permite CPFs de teste específicos
+  const cpfsTeste = ['00000000000', '11111111111', '12345678909', '12312312312']; // adicione os CPFs de teste que quiser
+  if (cpfsTeste.includes(cpf)) return true;
+
+  if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) return false;
+
+  let soma = 0;
+  for (let i = 0; i < 9; i++) soma += parseInt(cpf.charAt(i)) * (10 - i);
+  let resto = (soma * 10) % 11;
+  if (resto === 10 || resto === 11) resto = 0;
+  if (resto !== parseInt(cpf.charAt(9))) return false;
+
+  soma = 0;
+  for (let i = 0; i < 10; i++) soma += parseInt(cpf.charAt(i)) * (11 - i);
+  resto = (soma * 10) % 11;
+  if (resto === 10 || resto === 11) resto = 0;
+  return resto === parseInt(cpf.charAt(10));
+}
+
+
+// 🌷 Campo e mensagem
+const cpfCnpjInput = document.getElementById('cpfCnpj');
+const feedback = document.createElement('div');
+feedback.className = 'kitty-feedback';
+cpfCnpjInput.insertAdjacentElement('afterend', feedback);
+
+// 💫 Máscara + validação em tempo real
+cpfCnpjInput.addEventListener('input', function (e) {
+  let valor = e.target.value.replace(/\D/g, '');
+  let tipo = '';
+  let valido = false;
+
+  if (valor.length <= 11) {
+    tipo = 'CPF';
+    valor = valor.replace(/(\d{3})(\d)/, '$1.$2')
+                 .replace(/(\d{3})(\d)/, '$1.$2')
+                 .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+  } else {
+    tipo = 'CNPJ';
+    valor = valor.replace(/^(\d{2})(\d)/, '$1.$2')
+                 .replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3')
+                 .replace(/\.(\d{3})(\d)/, '.$1/$2')
+                 .replace(/(\d{4})(\d)/, '$1-$2');
+  }
+
+  e.target.value = valor;
+
+  if (tipo === 'CPF' && valor.replace(/\D/g, '').length === 11) valido = validarCPF(valor);
+  if (tipo === 'CNPJ' && valor.replace(/\D/g, '').length === 14) valido = validarCNPJ(valor);
+
+  if (valido) {
+    e.target.classList.remove('is-invalid');
+    e.target.classList.add('is-valid');
+    feedback.textContent = `${tipo} válido! ✨`;
+    feedback.style.color = '#28a745';
+  } else if (valor.replace(/\D/g, '').length >= 11) {
+    e.target.classList.remove('is-valid');
+    e.target.classList.add('is-invalid');
+    feedback.textContent = `${tipo} inválido 😿`;
+    feedback.style.color = '#d63384';
+  } else {
+    e.target.classList.remove('is-valid', 'is-invalid');
+    feedback.textContent = '';
+  }
+});
+
+// 🌸 Remove erro ao sair do campo se estiver válido
+cpfCnpjInput.addEventListener('blur', function () {
+  const valor = cpfCnpjInput.value.replace(/\D/g, '');
+  if ((valor.length === 11 && validarCPF(valor)) || (valor.length === 14 && validarCNPJ(valor))) {
+    cpfCnpjInput.classList.add('is-valid');
+  }
+});
+</script>
+
+<!-- 📌 Biblioteca IMask -->
+<script src="https://unpkg.com/imask"></script>
+
+<script>
+const maskOptions = {
+  mask: [
+    { mask: '000.000.000-00', maxLength: 11 },
+    { mask: '00.000.000/0000-00' }
+  ],
+  dispatch: function (appended, dynamicMasked) {
+    const number = (dynamicMasked.value + appended).replace(/\D/g, '');
+    return number.length > 11 ? dynamicMasked.compiledMasks[1] : dynamicMasked.compiledMasks[0];
+  }
+};
+
+IMask(cpfCnpjInput, maskOptions);
+</script>
+<script>  
+  const celularInput = document.getElementById('celular');
+  const feedbackCelular = document.createElement('div');
+  feedbackCelular.className = 'kitty-feedback';
+  celularInput.insertAdjacentElement('afterend', feedbackCelular);
+  
+// Números de teste permitidos
+const celularesTeste = ['999999999', '000000000', '123456789'];
+
+// Máscara dinâmica do celular (formato brasileiro)
+celularInput.addEventListener('input', function (e) {
+  let valor = e.target.value.replace(/\D/g, '');
+  
+  // Aplica máscara: (XX) XXXXX-XXXX ou (XX) XXXX-XXXX
+  if (valor.length > 10) {
+    valor = valor.replace(/^(\d{2})(\d{5})(\d{4}).*/, '($1) $2-$3');
+  } else if (valor.length > 5) {
+    valor = valor.replace(/^(\d{2})(\d{4})(\d{0,4}).*/, '($1) $2-$3');
+  } else if (valor.length > 2) {
+    valor = valor.replace(/^(\d{2})(\d{0,5})/, '($1) $2');
+  } else {
+    valor = valor.replace(/^(\d*)/, '($1');
+  }
+  
+  e.target.value = valor;
+  
+  // Validação
+  const numeros = valor.replace(/\D/g, '');
+  let valido = false;
+  
+  if (celularesTeste.includes(numeros)) {
+    valido = true; // aceita números de teste
+  } else if (numeros.length === 10 || numeros.length === 11) {
+    valido = true;
+  }
+  
+  // Feedback visual
+  if (valido) {
+    e.target.classList.remove('is-invalid');
+    e.target.classList.add('is-valid');
+    feedbackCelular.textContent = 'Celular válido! 📱';
+    feedbackCelular.style.color = '#28a745';
+  } else if (numeros.length >= 10) {
+    e.target.classList.remove('is-valid');
+    e.target.classList.add('is-invalid');
+    feedbackCelular.textContent = 'Celular inválido 😿';
+    feedbackCelular.style.color = '#d63384';
+  } else {
+    e.target.classList.remove('is-valid', 'is-invalid');
+    feedbackCelular.textContent = '';
+  }
+});
+
+// 🌸 Remove erro ao sair do campo se estiver válido
+celularInput.addEventListener('blur', function () {
+  const numeros = celularInput.value.replace(/\D/g, '');
+  if (celularesTeste.includes(numeros) || numeros.length === 10 || numeros.length === 11) {
+    celularInput.classList.add('is-valid');
+  }
+});
+</script>
+
+<script>
+  function salvarUsuario() {
+  const nome = document.getElementById('nome').value.trim();
+  const sobrenome = document.getElementById('sobrenome').value.trim();
+  const cpfCnpj = document.getElementById('cpfCnpj').value.trim();
+  const rg = document.getElementById('rg').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const celular = document.getElementById('celular').value.trim();
+  const senha = document.getElementById('senha').value.trim();
+
+  if (!cpfCnpj) {
+    alert('Por favor, preencha o CPF/CNPJ.');
+    return;
+  }
+
+  // Você pode colocar aqui uma validação do CPF/CNPJ como no modal se quiser
+
+  const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
+
+  usuarios.push({ nome, sobrenome, cpfCnpj, rg, email, celular, senha });
+
+  localStorage.setItem('usuarios', JSON.stringify(usuarios));
+  alert('Usuário cadastrado com sucesso!');
+  window.location.href = '/lista'; // ou sua página da lista
+}
+
+</script>
+
+
+<!-- 🌷 Estilo Hello Kitty Premium -->
+<style>
+  /* 🌸 Cartão principal */
+  .kitty-card {
+    border-radius: 16px;
+    overflow: hidden;
+    background-color: #fff;
+    transition: all 0.3s ease-in-out;
+  }
+
+  /* 💗 Cabeçalho */
+  .kitty-card-header {
+    background: linear-gradient(90deg, #ff9fcf, #ff80c3);
+    color: #fff;
+    padding: 1rem 1.25rem;
+  }
+
+  .kitty-card-header h4 {
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+
+  /* 💕 Rótulos */
+  .kitty-label {
+    color: #d63384;
+    font-weight: 600;
+  }
+
+  /* 🌷 Inputs */
+  .kitty-input {
+    border: 2px solid #ffd6ea;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+  }
+
+  .kitty-input:focus {
+    border-color: #ff80c3;
+    box-shadow: 0 0 10px rgba(255, 130, 180, 0.4);
+    outline: none;
+  }
+
+  /* 🌸 Input com ícone à esquerda */
+  .kitty-input-prepend {
+    background-color: #ffe6f2;
+    border: 2px solid #ffd6ea;
+    color: #d63384;
+    font-weight: bold;
+  }
+
+  /* ✅ Checkbox */
+  .kitty-checkbox:checked {
+    background-color: #ff80c3;
+    border-color: #ff80c3;
+  }
+
+  /* 💖 Botões principais */
+  .kitty-btn {
+    background-color: #ff80c3;
+    border: 2px solid #ff9fcf;
+    color: #fff;
+    font-weight: 600;
+    border-radius: 20px;
+    padding: 0.5rem 1.5rem;
+    transition: all 0.3s ease;
+  }
+
+  .kitty-btn:hover {
+    background-color: #ffb6e6;
+    box-shadow: 0 0 8px rgba(255, 192, 203, 0.6);
+    transform: scale(1.05);
+  }
+
+  /* 💌 Botão contornado */
+  .kitty-btn-outline {
+    border: 2px solid #ff80c3;
+    color: #ff80c3;
+    font-weight: 600;
+    border-radius: 20px;
+    padding: 0.5rem 1.5rem;
+    transition: all 0.3s ease;
+  }
+
+  .kitty-btn-outline:hover {
+    background-color: #ffb6e6;
+    color: #fff;
+    transform: scale(1.05);
+  }
+
+  /* 🌼 Ajuste visual para campos maiores (opcional) */
+  #validationCustom04 {
+    height: 70px;
+  }
+
+  /* ✨ Animação de foco nos inputs */
+  .kitty-input:focus {
+    animation: kittyPulse 0.4s ease-in-out;
+  }
+
+  @keyframes kittyPulse {
+    0% { box-shadow: 0 0 0 rgba(255, 130, 180, 0.4); }
+    50% { box-shadow: 0 0 8px rgba(255, 130, 180, 0.6); }
+    100% { box-shadow: 0 0 0 rgba(255, 130, 180, 0.4); }
+  }
+
+  /* 🌈 Responsividade */
+  @media (max-width: 576px) {
+    .kitty-card-header h4 {
+      font-size: 1.2rem;
+    }
+
+    .kitty-btn, .kitty-btn-outline {
+      width: 100%;
+    }
+  }
+
+  /* 💫 Feedback abaixo do campo */
+.kitty-feedback {
+  font-size: 0.9rem;
+  margin-top: 0.25rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+/* 🩷 Cores de validação */
+.is-valid {
+  border-color: #74e29e !important;
+  box-shadow: 0 0 6px rgba(116, 226, 158, 0.5);
+}
+
+.is-invalid {
+  border-color: #ff80c3 !important;
+  box-shadow: 0 0 6px rgba(255, 128, 195, 0.5);
+}
+
+</style>
+
+
+{% endblock %}

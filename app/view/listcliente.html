@@ -1,0 +1,291 @@
+{% extends "main.html" %}
+{% block main %}
+<!-- 🌸 Lista de Clientes - Estilo Hello Kitty Premium -->
+<div class="container my-4">
+  <div class="row justify-content-center">
+    <div class="col-12 col-lg-10">
+      <div class="card kitty-card shadow-lg border-0">
+        <div class="card-header kitty-card-header d-flex justify-content-between align-items-center">
+          <h5 class="mb-0 fw-bold text-white">
+            <i class="bi bi-people-fill me-1"></i> Lista de Clientes
+          </h5>
+          <a href="/cliente/cadastro" class="btn kitty-btn">
+            <i class="bi bi-person-plus-fill"></i> Cadastrar
+          </a>
+        </div>
+
+        <div class="card-body bg-white rounded-bottom">
+          <div class="table-responsive">
+            <table class="table align-middle text-center kitty-table">
+              <thead class="kitty-table-head">
+                <tr>
+                  <th>Código</th>
+                  <th>Nome / Nome Fantasia</th>
+                  <th>Sobrenome / Razão Social</th>
+                  <th>CPF / CNPJ</th>
+                  <th>RG</th>
+                  <th>IE</th>
+                  <th>Email</th>
+                  <th>Celular</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="tabelaClientes"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card-footer text-center bg-white border-0">
+          <a href="/home" class="btn kitty-btn-outline fw-semibold">
+            <i class="bi bi-arrow-left-circle"></i> Voltar
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Editar Cliente -->
+<div class="modal fade" id="editarModal" tabindex="-1" aria-labelledby="editarModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content kitty-card">
+      <div class="modal-header kitty-card-header">
+        <h5 class="modal-title text-white" id="editarModalLabel">Editar Cliente</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+      </div>
+      <div class="modal-body">
+        <form id="formEditarCliente">
+          <input type="hidden" id="modalIndex" />
+
+          <div class="mb-3">
+            <label for="modalNome" class="form-label">Nome / Nome Fantasia</label>
+            <input type="text" class="form-control" id="modalNome" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="modalSobrenome" class="form-label">Sobrenome / Razão Social</label>
+            <input type="text" class="form-control" id="modalSobrenome" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="modalCpfCnpj" class="form-label">CPF / CNPJ</label>
+            <input type="text" class="form-control" id="modalCpfCnpj" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="modalRg" class="form-label">RG</label>
+            <input type="text" class="form-control" id="modalRg">
+          </div>
+
+          <div class="mb-3">
+            <label for="modalIe" class="form-label">Inscrição Estadual (IE)</label>
+            <input type="text" class="form-control" id="modalIe">
+          </div>
+
+          <div class="mb-3">
+            <label for="modalEmail" class="form-label">Email</label>
+            <input type="email" class="form-control" id="modalEmail" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="modalCelular" class="form-label">Celular</label>
+            <input type="text" class="form-control" id="modalCelular" required>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn kitty-btn-outline" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn kitty-btn" id="salvarEdicao">Salvar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 🌸 Script de Gerenciamento de Clientes -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const tbody = document.getElementById('tabelaClientes');
+    let clientes = JSON.parse(localStorage.getItem('clientes')) || [];
+
+    function validarCpfCnpj(valor) {
+      const valorLimpo = valor.replace(/\D/g, '');
+      if (valorLimpo.length === 11) return /^[0-9]{11}$/.test(valorLimpo);
+      if (valorLimpo.length === 14) return /^[0-9]{14}$/.test(valorLimpo);
+      return false;
+    }
+
+    function renderizarTabela() {
+      tbody.innerHTML = '';
+      if (clientes.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="9" class="text-center text-muted">Nenhum cliente cadastrado 💭</td>
+          </tr>`;
+        return;
+      }
+
+      clientes.forEach((c, index) => {
+        tbody.innerHTML += `
+          <tr>
+            <td>${index + 1}</td>
+            <td>${c.nome}</td>
+            <td>${c.sobrenome}</td>
+            <td>${c.cpfCnpj ?? ''}</td>
+            <td>${c.rg ?? ''}</td>
+            <td>${c.ie ?? ''}</td>
+            <td>${c.email ?? ''}</td>
+            <td>${c.celular ?? ''}</td>
+            <td>
+              <button class="btn kitty-btn-outline btn-sm me-2 editar" data-index="${index}" data-bs-toggle="modal" data-bs-target="#editarModal">
+                <i class="bi bi-pencil-fill"></i> Editar
+              </button>
+              <button class="btn kitty-btn-danger btn-sm excluir" data-index="${index}">
+                <i class="bi bi-trash-fill"></i> Excluir
+              </button>
+            </td>
+          </tr>`;
+      });
+    }
+
+    renderizarTabela();
+
+    tbody.addEventListener('click', (e) => {
+      if (e.target.closest('.excluir')) {
+        const index = e.target.closest('.excluir').dataset.index;
+        if (confirm('Tem certeza que deseja excluir este cliente?')) {
+          clientes.splice(index, 1);
+          localStorage.setItem('clientes', JSON.stringify(clientes));
+          renderizarTabela();
+        }
+      } else if (e.target.closest('.editar')) {
+        const index = e.target.closest('.editar').dataset.index;
+        const c = clientes[index];
+        document.getElementById('modalIndex').value = index;
+        document.getElementById('modalNome').value = c.nome;
+        document.getElementById('modalSobrenome').value = c.sobrenome;
+        document.getElementById('modalCpfCnpj').value = c.cpfCnpj ?? '';
+        document.getElementById('modalRg').value = c.rg ?? '';
+        document.getElementById('modalIe').value = c.ie ?? '';
+        document.getElementById('modalEmail').value = c.email ?? '';
+        document.getElementById('modalCelular').value = c.celular ?? '';
+      }
+    });
+
+    document.getElementById('salvarEdicao').addEventListener('click', () => {
+      const index = document.getElementById('modalIndex').value;
+      const nome = document.getElementById('modalNome').value.trim();
+      const sobrenome = document.getElementById('modalSobrenome').value.trim();
+      const cpfCnpj = document.getElementById('modalCpfCnpj').value.trim();
+      const rg = document.getElementById('modalRg').value.trim();
+      const ie = document.getElementById('modalIe').value.trim();
+      const email = document.getElementById('modalEmail').value.trim();
+      const celular = document.getElementById('modalCelular').value.trim();
+
+      if (!validarCpfCnpj(cpfCnpj)) {
+        alert('CPF/CNPJ inválido! Insira um CPF com 11 dígitos ou CNPJ com 14 dígitos.');
+        return;
+      }
+
+      clientes[index] = { nome, sobrenome, cpfCnpj, rg, ie, email, celular };
+      localStorage.setItem('clientes', JSON.stringify(clientes));
+      renderizarTabela();
+
+      const editarModal = bootstrap.Modal.getInstance(document.getElementById('editarModal'));
+      editarModal.hide();
+    });
+  });
+</script>
+
+<!-- 🌷 Estilos Hello Kitty Premium -->
+<style>
+body {
+  background: radial-gradient(circle at center, #dce9f5 0%, #ffffff 40%, #ffffff 100%);
+  background-image: url('https://plus.unsplash.com/premium_photo-1676272747130-348694463771?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8cGFwZWwlMjBkZSUyMHBhcmVkZSUyMHJvc2F8ZW58MHx8MHx8fDA%3D&fm=jpg&q=60&w=3000');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  font-family: 'Poppins', 'Segoe UI', sans-serif;
+  margin: 0;
+  padding-top: 90px;
+  color: #2d2d2d;
+}
+.kitty-card {
+  border-radius: 16px;
+  overflow: hidden;
+  background-color: #fff;
+}
+
+.kitty-card-header {
+  background: linear-gradient(90deg, #ff9fcf, #ff80c3);
+  color: white;
+  padding: 1rem 1.25rem;
+}
+
+.kitty-table th {
+  background-color: #ffe6f2;
+  color: #d63384;
+  font-weight: 600;
+  border: none;
+}
+
+.kitty-table td {
+  vertical-align: middle;
+  color: #5a3a4b;
+}
+
+.kitty-table tbody tr:hover {
+  background-color: #fff0f8;
+  transition: all 0.3s ease-in-out;
+}
+
+.kitty-btn {
+  background-color: #ff80c3;
+  border: 2px solid #ff9fcf;
+  color: #fff;
+  font-weight: 600;
+  border-radius: 20px;
+  transition: all 0.3s ease;
+}
+
+.kitty-btn:hover {
+  background-color: #ffb6e6;
+  color: white;
+  transform: scale(1.05);
+  box-shadow: 0 0 8px rgba(255, 192, 203, 0.6);
+}
+
+.kitty-btn-outline {
+  border: 2px solid #ff80c3;
+  color: #ff80c3;
+  font-weight: 600;
+  border-radius: 20px;
+  background-color: transparent;
+  transition: all 0.3s ease;
+}
+
+.kitty-btn-outline:hover {
+  background-color: #ffb6e6;
+  color: #fff;
+  transform: scale(1.05);
+}
+
+.kitty-btn-danger {
+  background-color: #ffb3c6;
+  border: 2px solid #ff7a95;
+  color: #fff;
+  font-weight: 600;
+  border-radius: 20px;
+  transition: all 0.3s ease;
+}
+
+.kitty-btn-danger:hover {
+  background-color: #ff5a85;
+  box-shadow: 0 0 8px rgba(255, 130, 150, 0.7);
+  transform: scale(1.05);
+}
+
+.kitty-card, .kitty-btn, .kitty-table tr {
+  transition: all 0.3s ease-in-out;
+}
+</style>
+{% endblock %}

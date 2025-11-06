@@ -1,0 +1,191 @@
+
+/* 🌸 NAVBAR 
+.kitty-navbar {
+  background: linear-gradient(90deg, #ffb6d9, #ff9fcf, #ff80c3);
+  border-bottom: 2px solid #ffd6ea;
+  padding: 0.6rem 1rem;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+.kitty-logo {
+  filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.7));
+}
+
+.navbar-nav .nav-link {
+  transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.navbar-nav .nav-link:hover {
+  color: #fff9fb !important;
+  text-shadow: 0 0 8px #ffe0f0;
+  transform: translateY(-2px);
+}
+
+.kitty-dropdown {
+  background-color: #fff5fa;
+  border-radius: 10px;
+  padding: 0.4rem;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.kitty-dropdown a {
+  color: #d63384 !important;
+  font-weight: 500;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.kitty-dropdown a:hover {
+  background-color: #ffd6ea !important;
+  color: #a31561 !important;
+  transform: translateX(4px);
+}
+
+.kitty-btn {
+  background-color: #ffffff;
+  color: #d63384;
+  border: 2px solid #ffd6ea;
+  font-weight: 600;
+  border-radius: 20px;
+  transition: all 0.3s ease;
+}
+
+.kitty-btn:hover {
+  background-color: #ffb6e6;
+  color: #fff;
+  box-shadow: 0 0 10px rgba(255, 192, 203, 0.6);
+  transform: scale(1.05);
+}
+
+.kitty-btn-outline {
+  border: 2px solid #fff;
+  color: #fff;
+  font-weight: 600;
+  border-radius: 20px;
+  transition: all 0.3s ease;
+}
+
+.kitty-btn-outline:hover {
+  background-color: #fff;
+  color: #d63384;
+  box-shadow: 0 0 8px #fff;
+  transform: scale(1.05);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 992px) {
+  .navbar-nav {
+    text-align: center;
+  }
+  .d-flex {
+    justify-content: center;
+    margin-top: 1rem;
+  }
+}
+
+🌷 BODY 
+body {
+  background: radial-gradient(circle at center, #dce9f5 0%, #8aa6b8 40%, #3b4a59 100%);
+  background-image: url('https://plus.unsplash.com/premium_photo-1676272747130-348694463771?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8cGFwZWwlMjBkZSUyMHBhcmVkZSUyMHJvc2F8ZW58MHx8MHx8fDA%3D&fm=jpg&q=60&w=3000');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  font-family: 'Poppins', 'Segoe UI', sans-serif;
+  margin: 0;
+  padding-top: 90px;
+  color: #2d2d2d;
+}
+
+ 🌸 CARD PRINCIPAL 
+.kitty-card {
+  border-radius: 16px;
+  overflow: hidden;
+  background-color: #fff;
+}
+
+ 🌸 CABEÇALHO DO CARD 
+.kitty-card-header {
+  background: linear-gradient(90deg, #ff9fcf, #ff80c3);
+  color: white;
+  padding: 1rem 1.25rem;
+}
+
+ 🌸 TABELA 
+.kitty-table th {
+  background-color: #ffe6f2;
+  color: #d63384;
+  font-weight: 600;
+  border: none;
+}
+
+.kitty-table td {
+  vertical-align: middle;
+  color: #5a3a4b;
+}
+
+.kitty-table tbody tr:hover {
+  background-color: #fff0f8;
+  transition: all 0.3s ease-in-out;
+}
+
+ 🌸 BOTÕES 
+.kitty-btn {
+  background-color: #ff80c3;
+  border: 2px solid #ff9fcf;
+  color: #fff;
+  font-weight: 600;
+  border-radius: 20px;
+  transition: all 0.3s ease;
+}
+
+.kitty-btn:hover {
+  background-color: #ffb6e6;
+  color: white;
+  transform: scale(1.05);
+  box-shadow: 0 0 8px rgba(255, 192, 203, 0.6);
+}
+
+.kitty-btn-outline {
+  border: 2px solid #ff80c3;
+  color: #ff80c3;
+  font-weight: 600;
+  border-radius: 20px;
+  background-color: transparent;
+  transition: all 0.3s ease;
+}
+
+.kitty-btn-outline:hover {
+  background-color: #ffb6e6;
+  color: #fff;
+  transform: scale(1.05);
+}
+
+.kitty-btn-danger {
+  background-color: #ffb3c6;
+  border: 2px solid #ff7a95;
+  color: #fff;
+  font-weight: 600;
+  border-radius: 20px;
+  transition: all 0.3s ease;
+}
+
+.kitty-btn-danger:hover {
+  background-color: #ff5a85;
+  box-shadow: 0 0 8px rgba(255, 130, 150, 0.7);
+  transform: scale(1.05);
+}
+
+ 🌸 TRANSIÇÕES 
+.kitty-card, .kitty-btn, .kitty-table tr {
+  transition: all 0.3s ease-in-out;
+}
+  */
+
